@@ -1,10 +1,22 @@
 name = "OCPPVictron"
 uuid = "38334ee2-fe8f-50ea-a3f9-ecd2f20b71a9"
-authors = ["Stefan de lange <langestefan@msn.com>"]
 version = "0.1.0"
+authors = ["Stefan de lange <langestefan@msn.com>"]
 
 [workspace]
 projects = ["test", "docs"]
 
+[deps]
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+MQTTClient = "985f35cc-2c3d-4943-b8c1-f0931d5f0959"
+OCPPData = "96fa3b67-1af3-5f07-99a6-8e4efc5edabb"
+OCPPServer = "676c5a51-a8ef-5385-87a6-11d0f7ce946f"
+TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
+
 [compat]
+Dates = "1.11.0"
+JSON = "1.4.0"
+MQTTClient = "0.3.1"
+TOML = "1.0.3"
 julia = "1.10"

@@ -1,0 +1,5 @@
+[deps]
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+OCPPClient = "1ab4a031-0a20-52bf-b0ad-6a3bd01e82d0"
+OCPPData = "96fa3b67-1af3-5f07-99a6-8e4efc5edabb"
+OCPPVictron = "38334ee2-fe8f-50ea-a3f9-ecd2f20b71a9"

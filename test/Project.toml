@@ -1,9 +1,16 @@
 [deps]
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+OCPPClient = "1ab4a031-0a20-52bf-b0ad-6a3bd01e82d0"
+OCPPData = "96fa3b67-1af3-5f07-99a6-8e4efc5edabb"
+OCPPServer = "676c5a51-a8ef-5385-87a6-11d0f7ce946f"
 OCPPVictron = "38334ee2-fe8f-50ea-a3f9-ecd2f20b71a9"
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-TestItems = "1c621080-faea-4a02-84b6-bbd5e436b8fe"
-TestItemRunner = "f8b46487-2199-4994-9208-9a1283c18c0a"
 TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+TestItemRunner = "f8b46487-2199-4994-9208-9a1283c18c0a"
+TestItems = "1c621080-faea-4a02-84b6-bbd5e436b8fe"
 
 [sources]
+OCPPClient = {path = "../../OCPPClient.jl"}
+OCPPData = {path = "../../OCPPData.jl"}
+OCPPServer = {path = "../../OCPPServer.jl"}
 OCPPVictron = {path = ".."}

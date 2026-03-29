@@ -1,0 +1,10 @@
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+LiveServer = "16fef848-5104-11e9-1b77-fb7a48bbb589"
+OCPPVictron = "38334ee2-fe8f-50ea-a3f9-ecd2f20b71a9"
+
+[compat]
+Documenter = "1"
+
+[sources]
+OCPPVictron = {path = ".."}

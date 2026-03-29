@@ -1,0 +1,10 @@
+name = "OCPPVictron"
+uuid = "38334ee2-fe8f-50ea-a3f9-ecd2f20b71a9"
+authors = ["Stefan de lange <langestefan@msn.com>"]
+version = "0.1.0"
+
+[workspace]
+projects = ["test", "docs"]
+
+[compat]
+julia = "1.10"

@@ -1,0 +1,13 @@
+# Changes here will be overwritten by Copier
+AddPrecommitUpdateCI: false
+Authors: Stefan de lange <langestefan@msn.com>
+JuliaMinVersion: '1.10'
+License: MIT
+LicenseCopyrightHolders: Stefan de lange
+PackageName: OCPPVictron
+PackageOwner: JuliaSolarPV
+PackageUUID: 38334ee2-fe8f-50ea-a3f9-ecd2f20b71a9
+StrategyConfirmIncluded: false
+StrategyLevel: 3
+StrategyReviewExcluded: false
+_src_path: /home/langestefan/.julia/packages/BestieTemplate/fOzc4

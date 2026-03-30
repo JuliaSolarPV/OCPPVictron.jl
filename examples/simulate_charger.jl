@@ -108,24 +108,24 @@ function simulate_charging_session()
             sampled,
             OCPPData.V16.SampledValue(;
                 value = string(power),
-                measurand = "Power.Active.Import",
-                unit = "W",
+                measurand = OCPPData.V16.MeasurandPowerActiveImport,
+                unit = OCPPData.V16.UnitW,
             ),
         )
         push!(
             sampled,
             OCPPData.V16.SampledValue(;
                 value = string(current),
-                measurand = "Current.Import",
-                unit = "A",
+                measurand = OCPPData.V16.MeasurandCurrentImport,
+                unit = OCPPData.V16.UnitA,
             ),
         )
         push!(
             sampled,
             OCPPData.V16.SampledValue(;
                 value = string(round(energy_wh; digits = 1)),
-                measurand = "Energy.Active.Import.Register",
-                unit = "Wh",
+                measurand = OCPPData.V16.MeasurandEnergyActiveImportRegister,
+                unit = OCPPData.V16.UnitWh,
             ),
         )
 

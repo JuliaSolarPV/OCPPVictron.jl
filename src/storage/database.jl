@@ -60,6 +60,20 @@ function init_db!(; path::String = "ocppvictron.sqlite")
     return db
 end
 
+"""
+    max_transaction_id() → Int
+
+Return the highest transaction ID in the database (for initializing the counter).
+"""
+function max_transaction_id()
+    db = get_db()
+    rows = _collect_rows(
+        DBInterface.execute(db, "SELECT COALESCE(MAX(id), 0) as max_id FROM transactions"),
+    )
+    val = first(rows).max_id
+    return (val === missing || val === nothing) ? 0 : Int(val)
+end
+
 """Return the active database connection."""
 function get_db()
     db = _DB_REF[]

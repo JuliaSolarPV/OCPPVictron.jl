@@ -10,6 +10,7 @@ coverage
 docs/build/
 env
 node_modules
+frontend/dist/
 ocpp-files/
 *.sqlite
 ocppvictron.toml

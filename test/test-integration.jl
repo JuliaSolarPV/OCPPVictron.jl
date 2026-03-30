@@ -31,6 +31,8 @@
             nothing,  # no MQTT in tests
             config,
             0,
+            Dict{String,Vector{OCPPVictron.MeterSample}}(),
+            nothing,  # no db in tests
             ReentrantLock(),
         )
 

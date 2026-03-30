@@ -88,6 +88,33 @@ function register_ocpp_handlers!(cs::OCPPServer.CentralSystem, state::BridgeStat
                 meter_values = something(req.meter_value, [])
                 update_from_meter_values!(charger, meter_values)
                 charger.last_seen = now(UTC)
+
+                # Push to ring buffer for charts
+                sample = MeterSample(
+                    now(UTC),
+                    charger.power_w,
+                    charger.current_a,
+                    charger.l1_power_w,
+                    charger.l2_power_w,
+                    charger.l3_power_w,
+                )
+                push_meter_sample!(state.meter_history, session.id, sample)
+
+                # Persist to SQLite
+                if state.db_path !== nothing
+                    try
+                        insert_meter_value!(;
+                            charger_id = session.id,
+                            timestamp = _now_iso(),
+                            power_w = charger.power_w,
+                            current_a = charger.current_a,
+                            energy_wh = charger.energy_wh,
+                            transaction_id = charger.active_transaction_id,
+                        )
+                    catch e
+                        @warn "Failed to insert meter value" exception = e
+                    end
+                end
             end
         end
         publish_charger_state!(state, session.id)
@@ -122,6 +149,22 @@ function register_ocpp_handlers!(cs::OCPPServer.CentralSystem, state::BridgeStat
                 charger.last_seen = now(UTC)
             end
         end
+        # Persist to SQLite
+        if state.db_path !== nothing
+            try
+                ts = _opt_field(req, :timestamp)
+                create_transaction!(;
+                    charger_id = session.id,
+                    connector_id = req.connector_id,
+                    id_tag = req.id_tag,
+                    meter_start = req.meter_start,
+                    timestamp = ts !== nothing ? string(ts) : _now_iso(),
+                    tx_id = resp.transaction_id,
+                )
+            catch e
+                @warn "Failed to create transaction" exception = e
+            end
+        end
         publish_charger_state!(state, session.id)
         @info "Transaction started" charger = session.id tx_id = resp.transaction_id
     end
@@ -132,9 +175,10 @@ function register_ocpp_handlers!(cs::OCPPServer.CentralSystem, state::BridgeStat
     end
 
     OCPPServer.after!(cs, "StopTransaction") do session, req, _resp
-        lock(state.lock) do
+        tx_id_for_db = lock(state.lock) do
             charger = get(state.chargers, session.id, nothing)
             if charger !== nothing
+                tx_id = charger.active_transaction_id
                 if charger.transaction_meter_start !== nothing
                     charger.energy_wh =
                         Float64(req.meter_stop - charger.transaction_meter_start)
@@ -145,6 +189,22 @@ function register_ocpp_handlers!(cs::OCPPServer.CentralSystem, state::BridgeStat
                 charger.id_tag = nothing
                 charger.ocpp_status = :Available
                 charger.last_seen = now(UTC)
+                tx_id
+            else
+                nothing
+            end
+        end
+        # Persist to SQLite
+        if state.db_path !== nothing && tx_id_for_db !== nothing
+            try
+                ts = _opt_field(req, :timestamp)
+                complete_transaction!(;
+                    transaction_id = tx_id_for_db,
+                    meter_stop = req.meter_stop,
+                    timestamp = ts !== nothing ? string(ts) : _now_iso(),
+                )
+            catch e
+                @warn "Failed to complete transaction" exception = e
             end
         end
         publish_charger_state!(state, session.id)

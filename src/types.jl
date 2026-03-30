@@ -50,6 +50,42 @@ Base.@kwdef mutable struct VictronDevice
 end
 
 """
+    MeterSample
+
+A single timestamped meter reading for chart data.
+"""
+struct MeterSample
+    timestamp::DateTime
+    power_w::Float64
+    current_a::Float64
+    l1_power_w::Float64
+    l2_power_w::Float64
+    l3_power_w::Float64
+end
+
+const METER_HISTORY_SIZE = 300  # ~5 min at 1s intervals
+
+"""
+    push_meter_sample!(history, charger_id, sample)
+
+Push a meter sample to the ring buffer for a charger.
+"""
+function push_meter_sample!(
+    history::Dict{String,Vector{MeterSample}},
+    charger_id::String,
+    sample::MeterSample,
+)
+    buf = get!(history, charger_id) do
+        MeterSample[]
+    end
+    push!(buf, sample)
+    if length(buf) > METER_HISTORY_SIZE
+        deleteat!(buf, 1:(length(buf)-METER_HISTORY_SIZE))
+    end
+    return nothing
+end
+
+"""
     BridgeState
 
 Central bridge state. Owns all live data and references.
@@ -61,5 +97,7 @@ mutable struct BridgeState
     mqtt_client::Any
     config::BridgeConfig
     tx_counter::Int
+    meter_history::Dict{String,Vector{MeterSample}}
+    db_path::Union{String,Nothing}
     lock::ReentrantLock
 end
